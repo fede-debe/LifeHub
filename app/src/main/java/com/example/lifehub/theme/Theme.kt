@@ -1,6 +1,5 @@
-package com.example.lifehub.ui.theme
+package com.example.lifehub.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

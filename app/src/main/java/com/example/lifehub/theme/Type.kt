@@ -1,4 +1,4 @@
-package com.example.lifehub.ui.theme
+package com.example.lifehub.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
