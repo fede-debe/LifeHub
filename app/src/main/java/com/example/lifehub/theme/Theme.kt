@@ -1,18 +1,19 @@
-package com.example.compose
+package com.example.lifehub.theme
 import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import com.example.lifehub.theme.color.darkColorScheme
+import com.example.lifehub.theme.color.lightColorScheme
 import com.example.lifehub.theme.spacing.LifeHubSpacing
 import com.example.lifehub.theme.spacing.LocalLifeHubSpacing
 import com.example.ui.theme.AppTypography
 
 @Composable
 fun LifeHubTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = false,
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable() () -> Unit
@@ -23,8 +24,8 @@ fun LifeHubTheme(
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        darkTheme -> com.example.lifehub.theme.color.darkColorScheme
-        else -> com.example.lifehub.theme.color.lightColorScheme
+        darkTheme -> darkColorScheme
+        else -> lightColorScheme
     }
 
   MaterialTheme(
