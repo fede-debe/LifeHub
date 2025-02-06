@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
+import com.example.lifehub.theme.LifeHubTheme
 
 /**
  * A reusable container composable that handles loading, empty, and valid content states
@@ -60,7 +60,8 @@ fun EmptyState(
     @DrawableRes iconRes: Int,
     onClick: () -> Unit
 ) {
-    Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(
+        LifeHubTheme.spacing.stack.small)) {
         Icon(
             painter = painterResource(iconRes),
             tint = Color.Black,
