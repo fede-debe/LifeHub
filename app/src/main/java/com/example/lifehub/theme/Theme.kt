@@ -7,6 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import com.example.lifehub.theme.color.darkColorScheme
 import com.example.lifehub.theme.color.lightColorScheme
+import com.example.lifehub.theme.shape.LifeHubShapes
+import com.example.lifehub.theme.shape.LocalLifeHubShapes
 import com.example.lifehub.theme.spacing.LifeHubSpacing
 import com.example.lifehub.theme.spacing.LocalLifeHubSpacing
 import com.example.ui.theme.AppTypography
@@ -39,5 +41,9 @@ object LifeHubTheme {
     val spacing: LifeHubSpacing
         @Composable
         get() = LocalLifeHubSpacing.current
+
+    val shapes: LifeHubShapes
+        @Composable
+        get() = LocalLifeHubShapes.current
 }
 
