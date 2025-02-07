@@ -1,20 +1,14 @@
-package com.example.lifehub.util
+package com.example.lifehub.ui.components
 
-import androidx.annotation.DrawableRes
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.example.lifehub.theme.LifeHubTheme
 
 /**
@@ -54,22 +48,24 @@ fun UiStateScreenContainer(
     }
 }
 
-
+@Preview(showBackground = true, backgroundColor = 0xD1D5DB)
 @Composable
-fun EmptyState(
-    @DrawableRes iconRes: Int,
-    onClick: () -> Unit
-) {
-    Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(
-        LifeHubTheme.spacing.stack.small)) {
-        Icon(
-            painter = painterResource(iconRes),
-            tint = Color.Black,
-            contentDescription = "empty state icon"
+fun PreviewUiStateScreenContainer(@PreviewParameter(EmptyStateProvider::class) isEmpty: Boolean) {
+    LifeHubTheme {
+        UiStateScreenContainer(
+            loading = false,
+            empty = isEmpty,
+            emptyContent = { Text("This is the empty state.") },
+            onRefresh = { /* No-op for preview */ },
+            modifier = Modifier,
+            content = { Text("Main content goes here.") }
         )
-        Text(text = "!!! Info text todo !!!", textAlign = TextAlign.Center)
-        Button(onClick = onClick) {
-            Text(text = "Button", textAlign = TextAlign.Center)
-        }
     }
+}
+
+class EmptyStateProvider: PreviewParameterProvider<Boolean> {
+    override val values = sequenceOf(
+        true,
+        false
+    )
 }
