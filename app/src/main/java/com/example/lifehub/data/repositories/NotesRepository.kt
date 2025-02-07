@@ -4,6 +4,7 @@ import com.example.lifehub.data.db.dao.NotesDao
 import com.example.lifehub.data.model.Note
 import com.example.lifehub.di.DefaultDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import java.util.UUID
 import javax.inject.Inject
@@ -26,5 +27,9 @@ class NotesRepository @Inject constructor(
             content = content
         )
         dao.upsert(note = note)
+    }
+
+    fun getNotesListFlow() :Flow<List<Note>> {
+        return dao.getNotesList()
     }
 }
