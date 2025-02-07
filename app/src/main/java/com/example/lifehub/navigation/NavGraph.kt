@@ -10,9 +10,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.lifehub.ui.HomeScreen
-import com.example.lifehub.ui.notes.NotesScreen
-import com.example.lifehub.ui.notes.add.AddNoteScreen
+import com.example.lifehub.ui.screens.home.HomeScreen
+import com.example.lifehub.ui.screens.notes.NotesScreen
+import com.example.lifehub.ui.screens.notes.add.AddNoteScreen
 import kotlinx.coroutines.CoroutineScope
 
 @Composable

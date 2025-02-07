@@ -1,11 +1,11 @@
-package com.example.lifehub.data
+package com.example.lifehub.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
 data class Note(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey val id: String,
     val title: String = "",
     val content: String = ""
 )

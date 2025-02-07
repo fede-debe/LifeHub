@@ -2,8 +2,8 @@ package com.example.lifehub.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.lifehub.data.LifeHubDatabase
-import com.example.lifehub.data.NotesDao
+import com.example.lifehub.data.db.LifeHubDatabase
+import com.example.lifehub.data.db.dao.NotesDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
