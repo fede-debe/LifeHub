@@ -2,74 +2,41 @@ package com.example.lifehub.theme.color
 
 import androidx.compose.ui.graphics.Color
 
-val primaryLight = Color(0xFF00629D)
+val primaryLight = Color(0xFF139CF3)  // Light blue from the design
 val onPrimaryLight = Color(0xFFFFFFFF)
-val primaryContainerLight = Color(0xFF139CF3)
-val onPrimaryContainerLight = Color(0xFF003151)
-val secondaryLight = Color(0xFF4A5F83)
-val onSecondaryLight = Color(0xFFFFFFFF)
-val secondaryContainerLight = Color(0xFFC0D5FF)
-val onSecondaryContainerLight = Color(0xFF475C80)
-val tertiaryLight = Color(0xFF4A5F83)
-val onTertiaryLight = Color(0xFFFFFFFF)
-val tertiaryContainerLight = Color(0xFFC0D5FF)
-val onTertiaryContainerLight = Color(0xFF475C80)
-val errorLight = Color(0xFFBA1A1A)
-val onErrorLight = Color(0xFFFFFFFF)
-val errorContainerLight = Color(0xFFFFDAD6)
-val onErrorContainerLight = Color(0xFF93000A)
-val backgroundLight = Color(0xFFF3F4F6)
-val onBackgroundLight = Color(0xFF171C21)
-val surfaceLight = Color(0xFFFCF8F8)
-val onSurfaceLight = Color(0xFF1C1B1B)
-val surfaceVariantLight = Color(0xFFE1E2E7)
-val onSurfaceVariantLight = Color(0xFF45474B)
-val outlineLight = Color(0xFF75777B)
-val outlineVariantLight = Color(0xFFC5C6CB)
-val scrimLight = Color(0xFF000000)
-val inverseSurfaceLight = Color(0xFF313030)
-val inverseOnSurfaceLight = Color(0xFFF3F0EF)
-val inversePrimaryLight = Color(0xFF99CBFF)
-val surfaceDimLight = Color(0xFFDCD9D9)
-val surfaceBrightLight = Color(0xFFFCF8F8)
-val surfaceContainerLowestLight = Color(0xFFFFFFFF)
-val surfaceContainerLowLight = Color(0xFFF6F3F2)
-val surfaceContainerLight = Color(0xFFF1EDEC)
-val surfaceContainerHighLight = Color(0xFFEBE7E7)
-val surfaceContainerHighestLight = Color(0xFFE5E2E1)
 
-val primaryDark = Color(0xFF99CBFF)
-val onPrimaryDark = Color(0xFF003354)
-val primaryContainerDark = Color(0xFF139CF3)
-val onPrimaryContainerDark = Color(0xFF003151)
-val secondaryDark = Color(0xFFECF0FF)
-val onSecondaryDark = Color(0xFF1B3052)
-val secondaryContainerDark = Color(0xFFC0D5FF)
-val onSecondaryContainerDark = Color(0xFF475C80)
-val tertiaryDark = Color(0xFFECF0FF)
-val onTertiaryDark = Color(0xFF1B3052)
-val tertiaryContainerDark = Color(0xFFC0D5FF)
-val onTertiaryContainerDark = Color(0xFF475C80)
-val errorDark = Color(0xFFFFB4AB)
-val onErrorDark = Color(0xFF690005)
-val errorContainerDark = Color(0xFF93000A)
-val onErrorContainerDark = Color(0xFFFFDAD6)
-val backgroundDark = Color(0xFF0F1419)
-val onBackgroundDark = Color(0xFFDFE3EA)
-val surfaceDark = Color(0xFF131313)
-val onSurfaceDark = Color(0xFFE5E2E1)
-val surfaceVariantDark = Color(0xFF45474B)
-val onSurfaceVariantDark = Color(0xFFC5C6CB)
-val outlineDark = Color(0xFF8F9195)
-val outlineVariantDark = Color(0xFF45474B)
-val scrimDark = Color(0xFF000000)
-val inverseSurfaceDark = Color(0xFFE5E2E1)
-val inverseOnSurfaceDark = Color(0xFF313030)
-val inversePrimaryDark = Color(0xFF00629D)
-val surfaceDimDark = Color(0xFF131313)
-val surfaceBrightDark = Color(0xFF3A3939)
-val surfaceContainerLowestDark = Color(0xFF0E0E0E)
-val surfaceContainerLowDark = Color(0xFF1C1B1B)
-val surfaceContainerDark = Color(0xFF201F1F)
-val surfaceContainerHighDark = Color(0xFF2A2A2A)
-val surfaceContainerHighestDark = Color(0xFF353434)
+val secondaryLight = Color(0xFF1D4F91)  // Dark blue for accents (tertiary)
+val onSecondaryLight = Color(0xFFFFFFFF)
+
+val backgroundLight = Color(0xFFF3F4F6)  // Light gray background
+val onBackgroundLight = Color(0xFF000000)  // Black text for contrast
+
+val surfaceLight = Color(0xFFFFFFFF)  // White for cards/surfaces
+val onSurfaceLight = Color(0xFF000000)
+
+val outlineLight = Color(0xFFC5C6CB)
+
+val errorLight = Color(0xFFBA1A1A)  // Bright red for errors
+val onErrorLight = Color(0xFF690005)  // Darker red for contrast (improves legibility)
+
+val textSecondaryLight = Color(0xFF6B7280)  // Secondary text color
+
+
+val primaryDark = Color(0xFF139CF3)  // Same primary for dark mode
+val onPrimaryDark = Color(0xFF003151)
+
+val secondaryDark = Color(0xFF2A60B1)  // Slightly lighter dark blue for contrast
+val onSecondaryDark = Color(0xFFFFFFFF)
+
+val backgroundDark = Color(0xFF121212)  // Dark background
+val onBackgroundDark = Color(0xFFE0E0E0)  // Light text for dark mode
+
+val surfaceDark = Color(0xFF1D1D1D)  // Darker surface for cards
+val onSurfaceDark = Color(0xFFE0E0E0)
+
+val outlineDark = Color(0xFFC5C6CB)
+
+val errorDark = Color(0xFFBA1A1A)  // Bright red for errors
+val onErrorDark = Color(0xFF690005)  // Darker red for contrast (improves legibility)
+
+val textSecondaryDark = Color(0xFFA1A1A1)  // Muted secondary text color

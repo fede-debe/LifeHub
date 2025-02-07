@@ -52,7 +52,7 @@ fun PlaceholderImage(text: String?) {
                 brush = Brush.linearGradient(
                     colors = listOf(
                         Color.White.copy(alpha = 0.8f),
-                        MaterialTheme.colorScheme.secondary.copy(alpha = 0.8f)
+                        MaterialTheme.colorScheme.secondary
                     ),
                     start = Offset(0f, Float.POSITIVE_INFINITY),
                     end = Offset(Float.POSITIVE_INFINITY, 0f)
@@ -68,7 +68,7 @@ fun PlaceholderImage(text: String?) {
                     .padding(start = LifeHubTheme.spacing.inset.medium, bottom = Spacing.spacing12),
                 style = MaterialTheme.typography.displayMedium,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.tertiary
+                color = MaterialTheme.colorScheme.secondary
             )
         }
     }
