@@ -38,7 +38,7 @@ fun TextInput(
     enabled: Boolean = true,
     readOnly: Boolean = false,
     inputTitle: String? = null,
-    label: @Composable (() -> Unit)? = { InputLabel(inputTitle ?: "") },
+    labelText: String? = null,
     isOptional: Boolean = false,
     placeholder: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
@@ -67,7 +67,7 @@ fun TextInput(
                 if (it.length <= (maxCharacters ?: Int.MAX_VALUE)) onValueChange(it)
             },
             isError = errorText != null,
-            label = label,
+            label = { if (labelText != null) LabelText(text = labelText) },
             placeholder = placeholder,
             modifier = inputModifier
                 .fillMaxWidth(),
@@ -101,13 +101,23 @@ fun TextInput(
 fun TextInputPreview() {
     LifeHubTheme {
         var text by remember { mutableStateOf("") }
-        TextInput(
-            value = text,
-            onValueChange = { text = it },
-            label = { Text(text = "Deposit Amount") },
-            placeholder = { Text(text = "Balance: 14.559 Sushi") },
-            errorText = null
-        )
+        Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.SpaceBetween) {
+            TextInput(
+                value = text,
+                onValueChange = { text = it },
+                labelText = "Deposit Amount",
+                placeholder = { Text(text = "Balance: 14.559 Sushi") },
+                errorText = null
+            )
+
+            TextInput(
+                value = text,
+                inputTitle = "Deposit Amount",
+                onValueChange = { text = it },
+                placeholder = { Text(text = "Balance: 14.559 Sushi") },
+                errorText = null
+            )
+        }
     }
 }
 
@@ -185,11 +195,10 @@ fun InputLabel(
 ) {
     Text(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(bottom = LifeHubTheme.spacing.stack.extraSmall),
+            .fillMaxWidth(),
         text = buildAnnotatedString {
             withStyle(
-                style = MaterialTheme.typography.bodySmall.toSpanStyle().merge(
+                style = MaterialTheme.typography.bodyLarge.toSpanStyle().merge(
                     SpanStyle(
                         color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.SemiBold
@@ -245,6 +254,11 @@ fun InputInfoTextPreview() {
     LifeHubTheme {
         InputInfoText(text = "Your username must be at least 8 characters long.")
     }
+}
+
+@Composable
+fun LabelText(text: String) {
+    Text(text = text, color = LifeHubTheme.colors.textColorSecondary)
 }
 
 
