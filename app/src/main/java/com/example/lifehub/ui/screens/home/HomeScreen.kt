@@ -43,9 +43,7 @@ private fun HomeScreenContent(modifier: Modifier, onClickCategory: () -> Unit) {
         loading = false,
         modifier = modifier,
         empty = false,
-        emptyContent = {
-            // todo content
-        },
+        emptyContent = {},
         onRefresh = {}
     ) {
         Column(
