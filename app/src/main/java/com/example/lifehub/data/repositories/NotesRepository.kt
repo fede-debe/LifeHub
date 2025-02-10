@@ -29,7 +29,15 @@ class NotesRepository @Inject constructor(
         dao.upsert(note = note)
     }
 
-    fun getNotesListFlow() :Flow<List<Note>> {
+    fun getNotesListFlow(): Flow<List<Note>> {
         return dao.getNotesList()
+    }
+
+    fun getNoteDetails(noteId: String): Flow<Note> {
+        return dao.getNoteById(noteId = noteId)
+    }
+
+    suspend fun deleteNote(noteId: String) {
+        dao.deleteById(noteId = noteId)
     }
 }
