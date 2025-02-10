@@ -37,15 +37,14 @@ import com.example.lifehub.ui.components.UiStateScreenContainer
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddNoteScreen(
-    modifier: Modifier = Modifier,
     viewModel: AddNoteViewModel = hiltViewModel(),
-    onBack: () -> Unit,
+    onClickBack: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    Scaffold(modifier = modifier.fillMaxSize(), topBar = {
+    Scaffold(topBar = {
         TopAppBar(title = { Text("Add note") }, navigationIcon = {
-            IconButton(onClick = onBack) {
+            IconButton(onClick = onClickBack) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "top bar arrow back")
             }
         })
@@ -57,7 +56,7 @@ fun AddNoteScreen(
             onSetContent = viewModel::setContent,
             onClickAddNote = {
                 viewModel.createNote()
-                onBack()
+                onClickBack()
             })
     }
 }
@@ -140,6 +139,6 @@ private fun AddNoteContent(
 @Composable
 private fun AddNotesScreenPreview() {
     LifeHubTheme {
-        AddNoteScreen(onBack = {})
+        AddNoteScreen(onClickBack = {})
     }
 }
