@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">LifeHub</string>
+    <string name="successfully_deleted_note_message">Note was deleted</string>
 </resources>

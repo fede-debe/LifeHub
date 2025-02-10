@@ -11,7 +11,7 @@ data class SpacingValues(
     val small: Dp,
     val medium: Dp,
     val large: Dp,
-    val extraLarge: Dp? = null
+    val extraLarge: Dp
 )
 
 object Spacing {
@@ -38,7 +38,8 @@ val LocalLifeHubSpacing = staticCompositionLocalOf {
             extraSmall = Spacing.spacing8,
             small = Spacing.spacing12,
             medium = Spacing.spacing16,
-            large = Spacing.spacing24
+            large = Spacing.spacing24,
+            extraLarge = Spacing.spacing48
         ),
         stack = SpacingValues(
             extraSmall = Spacing.spacing4,

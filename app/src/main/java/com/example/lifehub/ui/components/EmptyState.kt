@@ -3,11 +3,11 @@ package com.example.lifehub.ui.components
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -31,17 +31,23 @@ fun EmptyState(
     onClick: () -> Unit
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(LifeHubTheme.spacing.stack.small)
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Icon(
-            painter = painterResource(iconRes),
-            tint = Color.Black,
-            contentDescription = "empty state icon"
-        )
-        Text(text = description, textAlign = TextAlign.Center)
-        Button(onClick = onClick) {
-            Text(text = "Add new", textAlign = TextAlign.Center)
+        Column(
+            verticalArrangement = Arrangement.spacedBy(LifeHubTheme.spacing.stack.medium),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                painter = painterResource(iconRes),
+                tint = Color.Black,
+                contentDescription = "empty state icon"
+            )
+            Text(text = description, textAlign = TextAlign.Center)
+            ButtonPrimary(onClick = onClick) {
+                Text(text = "Add new", textAlign = TextAlign.Center)
+            }
         }
     }
 }
