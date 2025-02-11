@@ -2,8 +2,8 @@ package com.example.lifehub.navigation
 
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import com.example.lifehub.navigation.Destinations.NOTES_ROUTE
 import com.example.lifehub.navigation.DestinationsArgs.NOTE_ID
-import com.example.lifehub.navigation.DestinationsArgs.SNACK_BAR_MESSAGE_ARG
 import com.example.lifehub.navigation.Screens.ADD_NOTE_SCREEN
 import com.example.lifehub.navigation.Screens.HOME_SCREEN
 import com.example.lifehub.navigation.Screens.NOTES_SCREEN
@@ -24,7 +24,7 @@ private object Screens {
  */
 object Destinations {
     const val HOME_ROUTE = HOME_SCREEN
-    const val NOTES_ROUTE = "$NOTES_SCREEN?$SNACK_BAR_MESSAGE_ARG={$SNACK_BAR_MESSAGE_ARG}"
+    const val NOTES_ROUTE = NOTES_SCREEN
     const val ADD_NOTE_ROUTE = ADD_NOTE_SCREEN
     const val NOTE_DETAILS_ROUTE = "$NOTE_DETAILS_SCREEN/{$NOTE_ID}"
 }
@@ -34,14 +34,11 @@ object Destinations {
  */
 object DestinationsArgs {
     const val NOTE_ID = "noteId"
-    const val SNACK_BAR_MESSAGE_ARG = "snackBarMessage"
 }
 
 class NavigationActions(private val navController: NavHostController) {
-    fun navigateToNotesScreen(snackBarMessage: Int = 0) {
-        navController.navigate(NOTES_SCREEN.let { value ->
-            if (snackBarMessage != 0) "$value?$SNACK_BAR_MESSAGE_ARG=$snackBarMessage" else value
-        }) {
+    fun navigateToNotesScreen() {
+        navController.navigate(NOTES_ROUTE) {
             popUpTo(navController.graph.findStartDestination().id) {
                 saveState = true
             }
