@@ -1,6 +1,5 @@
 package com.example.lifehub.ui.screens.notes
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,9 +24,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -42,15 +41,17 @@ import java.util.Locale
 
 @Composable
 fun NotesScreen(
-    @StringRes snackBarMessage: Int,
     viewModel: NotesViewModel = hiltViewModel(),
+    resultViewModel: NotesResultViewModel,
     snackBarHostState: SnackbarHostState = remember { SnackbarHostState() },
     onClickAddNote: () -> Unit,
     onNoteClick: (String) -> Unit,
-    onSnackBarMessageDisplayed: () -> Unit,
     onClickBack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val message = resultViewModel.snackBarMessage.collectAsState().value
+    val snackBarText = message?.let { stringResource(id = it) }
 
     Scaffold(modifier = Modifier.fillMaxSize(),
         snackbarHost = { SnackbarHost(snackBarHostState) },
@@ -72,19 +73,10 @@ fun NotesScreen(
             onClickAddNote = onClickAddNote
         )
 
-        uiState.snackBarMessage?.let { message ->
-            val snackBarText = stringResource(message)
-            LaunchedEffect(snackBarHostState, viewModel, message, snackBarText) {
-                snackBarHostState.showSnackbar(snackBarText)
-                viewModel.snackBarMessageShown()
-            }
-        }
-
-        val currentOnSnackBarMessageDisplayed by rememberUpdatedState(onSnackBarMessageDisplayed)
-        LaunchedEffect(snackBarMessage) {
-            if (snackBarMessage != 0) {
-                viewModel.showResultMessage(snackBarMessage)
-                currentOnSnackBarMessageDisplayed()
+        LaunchedEffect(snackBarText) {
+            snackBarText?.let {
+                snackBarHostState.showSnackbar(it)
+                resultViewModel.snackBarMessageShown()
             }
         }
     }
