@@ -89,8 +89,8 @@ fun TextInput(
                 focusedTextColor = MaterialTheme.colorScheme.onSurface,
                 cursorColor = MaterialTheme.colorScheme.secondary,
                 focusedBorderColor = MaterialTheme.colorScheme.secondary,
-                unfocusedContainerColor = Color(0XFFE1F5FE),
-                focusedContainerColor = Color(0XFFE1F5FE)
+                unfocusedContainerColor = Color(0xFFEBF9FF),
+                focusedContainerColor = Color(0xFFEBF9FF)
             )
         )
     }

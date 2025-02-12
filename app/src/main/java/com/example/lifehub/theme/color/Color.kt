@@ -8,7 +8,7 @@ val onPrimaryLight = Color(0xFFFFFFFF)
 val secondaryLight = Color(0xFF1D4F91)  // Dark blue for accents (tertiary)
 val onSecondaryLight = Color(0xFFFFFFFF)
 
-val backgroundLight = Color(0xFFF3F4F6)  // Light gray background
+val backgroundLight = Color(0xFFFFFFFF)  // White background
 val onBackgroundLight = Color(0xFF000000)  // Black text for contrast
 
 val surfaceLight = Color(0xFFFFFFFF)  // White for cards/surfaces
