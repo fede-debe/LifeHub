@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class NotesUiState(
@@ -18,13 +19,12 @@ data class NotesUiState(
 
 @HiltViewModel
 class NotesViewModel @Inject constructor(
-    repository: NotesRepository
+    private val repository: NotesRepository
 ) : ViewModel() {
-
 
     val uiState: StateFlow<NotesUiState> = repository.getNotesListFlow().map { notes ->
         NotesUiState(
-            items = notes,
+            items = notes.reversed(),
             isLoading = false,
         )
     }.stateIn(
@@ -32,4 +32,8 @@ class NotesViewModel @Inject constructor(
         started = WhileUiSubscribed,
         initialValue = NotesUiState(isLoading = true)
     )
+
+    fun deleteNote(noteId: String) = viewModelScope.launch {
+        repository.deleteNote(noteId = noteId)
+    }
 }
