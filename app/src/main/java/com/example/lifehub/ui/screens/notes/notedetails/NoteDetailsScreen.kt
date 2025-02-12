@@ -34,7 +34,6 @@ import com.example.lifehub.theme.LifeHubTheme
 import com.example.lifehub.ui.components.ButtonPrimary
 import com.example.lifehub.ui.components.UiStateScreenContainer
 import kotlinx.coroutines.launch
-import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -124,11 +123,8 @@ private fun NoteDetailsContent(note: Note?, modifier: Modifier) {
                     verticalArrangement = Arrangement.spacedBy(LifeHubTheme.spacing.stack.medium)
                 ) {
                     Text(
-                        text = validNote.title.replaceFirstChar {
-                            if (it.isLowerCase()) it.titlecase(
-                                Locale.ROOT
-                            ) else it.toString()
-                        }, style = MaterialTheme.typography.headlineSmall,
+                        text = validNote.title,
+                        style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.SemiBold
                     )
                     Text(text = validNote.content, style = MaterialTheme.typography.bodyLarge)
