@@ -2,23 +2,23 @@ package com.example.lifehub.ui.screens.notes.add
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -30,7 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,23 +51,24 @@ fun AddNoteScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-    Scaffold(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection), topBar = {
-        TopAppBar(
-            title = { Text("Add note") },
-            modifier = Modifier
-                .windowInsetsPadding(WindowInsets.statusBars)
-                .padding(bottom = LifeHubTheme.spacing.stack.medium),
-            navigationIcon = {
-                IconButton(onClick = onClickBack) {
-                    Icon(
-                        Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "top bar arrow back"
-                    )
-                }
-            },
-            scrollBehavior = scrollBehavior
-        )
-    }) { paddingValues ->
+    Scaffold(
+        contentWindowInsets = ScaffoldDefaults.contentWindowInsets.only(WindowInsetsSides.Top),
+        topBar = {
+            TopAppBar(
+                title = { Text("Add note") },
+                modifier = Modifier
+                    .padding(bottom = LifeHubTheme.spacing.stack.medium),
+                navigationIcon = {
+                    IconButton(onClick = onClickBack) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "top bar arrow back"
+                        )
+                    }
+                },
+                scrollBehavior = scrollBehavior
+            )
+        }) { paddingValues ->
         AddNoteContent(
             uiState = uiState,
             modifier = Modifier
@@ -91,66 +92,63 @@ private fun AddNoteContent(
     onSetContent: (String) -> Unit,
     onClickAddNote: () -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
+
     var title by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
 
     Column(
-        modifier = modifier,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(LifeHubTheme.spacing.inset.medium),
         verticalArrangement = Arrangement.spacedBy(LifeHubTheme.spacing.stack.medium)
     ) {
+        TextInput(
+            value = title,
+            inputTitle = "Title",
+            onValueChange = { input ->
+                title = input
+                onSetTitle(title)
+            },
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Sentences,
+                autoCorrectEnabled = true,
+                imeAction = ImeAction.Next
+            )
+        )
 
-        Card(
-            modifier = Modifier
+        TextInput(
+            value = content,
+            inputTitle = "Content",
+            singleLine = false,
+            maxLines = 100,
+            inputModifier = Modifier
                 .fillMaxWidth()
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(LifeHubTheme.spacing.inset.medium),
-                verticalArrangement = Arrangement.spacedBy(LifeHubTheme.spacing.stack.medium)
-            ) {
-                TextInput(
-                    value = title,
-                    inputTitle = "Title",
-                    onValueChange = { input ->
-                        title = input
-                        onSetTitle(title)
-                    },
-                    keyboardOptions = KeyboardOptions(
-                        capitalization = KeyboardCapitalization.Sentences,
-                        autoCorrectEnabled = true,
-                        imeAction = ImeAction.Next
-                    )
-                )
-
-                TextInput(
-                    value = content,
-                    inputTitle = "Content",
-                    singleLine = false,
-                    maxLines = 100,
-                    inputModifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 300.dp)
-                        .clip(LifeHubTheme.shapes.medium),
-                    onValueChange = { input ->
-                        content = input
-                        onSetContent(input)
-                    },
-                    keyboardOptions = KeyboardOptions(
-                        capitalization = KeyboardCapitalization.Sentences,
-                        autoCorrectEnabled = true,
-                        imeAction = ImeAction.Done
-                    )
-                )
-
-                ButtonPrimary(
-                    onClick = onClickAddNote,
-                    enabled = uiState.isNoteFilled,
-                    modifier = Modifier.align(Alignment.End)
-                ) {
-                    Text(text = "Add note")
+                .heightIn(min = 300.dp)
+                .clip(LifeHubTheme.shapes.medium),
+            onValueChange = { input ->
+                content = input
+                onSetContent(input)
+            },
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Sentences,
+                autoCorrectEnabled = true,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    focusManager.clearFocus()
                 }
-            }
+            )
+        )
+
+        ButtonPrimary(
+            onClick = onClickAddNote,
+            enabled = uiState.isNoteFilled,
+            modifier = Modifier
+                .align(Alignment.End)
+        ) {
+            Text(text = "Add note")
         }
     }
 }

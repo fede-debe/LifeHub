@@ -2,9 +2,14 @@ package com.example.lifehub.ui.screens.notes.notedetails
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
@@ -14,9 +19,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -42,20 +50,22 @@ fun NoteDetailsScreen(
     onDeleteNote: () -> Unit,
     onClickBack: () -> Unit
 ) {
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    Scaffold(
+    Scaffold(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        contentWindowInsets = ScaffoldDefaults.contentWindowInsets.only(WindowInsetsSides.Top),
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = "Note",
+                        text = uiState.item?.title ?: "Note",
                         style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.SemiBold
                     )
                 },
                 navigationIcon = {
@@ -76,13 +86,13 @@ fun NoteDetailsScreen(
                         )
                     }
                 },
+                scrollBehavior = scrollBehavior
             )
         }) { paddingValues ->
         NoteDetailsContent(
             note = uiState.item,
             modifier = Modifier
                 .padding(paddingValues)
-                .fillMaxSize()
         )
 
         if (showBottomSheet) {
@@ -111,26 +121,21 @@ private fun NoteDetailsContent(note: Note?, modifier: Modifier) {
         modifier = modifier,
         empty = false,
         emptyContent = {},
-        onRefresh = {}
+        onRefresh = null
     ) {
-
-        Column {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(LifeHubTheme.spacing.inset.medium)
+                .navigationBarsPadding(),
+            verticalArrangement = Arrangement.spacedBy(LifeHubTheme.spacing.stack.medium)
+        ) {
             note?.let { validNote ->
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(LifeHubTheme.spacing.inset.medium),
-                    verticalArrangement = Arrangement.spacedBy(LifeHubTheme.spacing.stack.medium)
-                ) {
-                    Text(
-                        text = validNote.title,
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                    Text(text = validNote.content, style = MaterialTheme.typography.bodyLarge)
-                }
+                Text(text = validNote.content, style = MaterialTheme.typography.bodyLarge)
             }
         }
+
     }
 }
 
