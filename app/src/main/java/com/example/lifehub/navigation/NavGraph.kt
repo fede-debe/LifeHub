@@ -56,11 +56,14 @@ fun NavGraph(
         }
 
         composable(Destinations.ADD_NOTE_ROUTE) {
-            AddNoteScreen(onClickBack = { navController.popBackStack() })
+            AddNoteScreen(onAddNote = {
+                resultViewModel.postSnackBarMessage(R.string.successfully_created_note_message)
+                navController.popBackStack()
+            }, onClickBack = { navController.popBackStack() })
         }
 
         composable(Destinations.NOTE_DETAILS_ROUTE) {
-            NoteDetailsScreen(resultViewModel = resultViewModel,
+            NoteDetailsScreen(
                 onClickBack = { navController.navigateUp() },
                 onDeleteNote = {
                     resultViewModel.postSnackBarMessage(R.string.successfully_deleted_note_message)

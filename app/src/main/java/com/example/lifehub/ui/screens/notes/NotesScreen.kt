@@ -1,10 +1,14 @@
 package com.example.lifehub.ui.screens.notes
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -17,19 +21,28 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.lifehub.R
@@ -37,8 +50,10 @@ import com.example.lifehub.data.model.Note
 import com.example.lifehub.theme.LifeHubTheme
 import com.example.lifehub.ui.components.EmptyState
 import com.example.lifehub.ui.components.UiStateScreenContainer
-import java.util.Locale
+import com.example.lifehub.ui.screens.notes.notedetails.DeleteNoteBottomSheet
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotesScreen(
     viewModel: NotesViewModel = hiltViewModel(),
@@ -49,16 +64,27 @@ fun NotesScreen(
     onClickBack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    val message = resultViewModel.snackBarMessage.collectAsState().value
+    val message by resultViewModel.snackBarMessage.collectAsState()
     val snackBarText = message?.let { stringResource(id = it) }
 
-    Scaffold(modifier = Modifier.fillMaxSize(),
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val sheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
+    var showBottomSheet by remember { mutableStateOf(false) }
+    var noteId by remember { mutableStateOf("") }
+
+    Scaffold(modifier = Modifier
+        .fillMaxSize()
+        .nestedScroll(scrollBehavior.nestedScrollConnection),
+        contentWindowInsets = ScaffoldDefaults.contentWindowInsets.only(WindowInsetsSides.Top),
         snackbarHost = { SnackbarHost(snackBarHostState) },
         topBar = {
-            NoteScreenTopBar(onClickBack)
+            NoteScreenTopBar(scrollBehavior = scrollBehavior, onClickBack = onClickBack)
         }, floatingActionButton = {
-            SmallFloatingActionButton(onClick = onClickAddNote) {
+            SmallFloatingActionButton(
+                modifier = Modifier.navigationBarsPadding(),
+                onClick = onClickAddNote
+            ) {
                 Icon(
                     imageVector = Icons.Filled.Add,
                     contentDescription = "fab add new note"
@@ -67,11 +93,15 @@ fun NotesScreen(
         }) { paddingValues ->
 
         NotesContent(
-            notes = uiState.items,
-            modifier = Modifier.padding(paddingValues),
+            uiState = uiState,
+            modifier = Modifier
+                .padding(paddingValues),
             onNoteClick = onNoteClick,
-            onClickAddNote = onClickAddNote
-        )
+            onClickAddNote = onClickAddNote,
+            onNoteLongClick = { id ->
+                noteId = id
+                showBottomSheet = true
+            })
 
         LaunchedEffect(snackBarText) {
             snackBarText?.let {
@@ -79,12 +109,28 @@ fun NotesScreen(
                 resultViewModel.snackBarMessageShown()
             }
         }
+
+        if (showBottomSheet) {
+            DeleteNoteBottomSheet(sheetState = sheetState, onDismiss = {
+                showBottomSheet = false
+            }, onConfirmDelete = {
+                scope.launch {
+                    viewModel.deleteNote(noteId = noteId)
+                    resultViewModel.postSnackBarMessage(R.string.successfully_deleted_note_message)
+                    sheetState.hide()
+                }.invokeOnCompletion {
+                    if (!sheetState.isVisible) {
+                        showBottomSheet = false
+                    }
+                }
+            })
+        }
     }
 }
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun NoteScreenTopBar(onClickBack: () -> Unit) {
+private fun NoteScreenTopBar(scrollBehavior: TopAppBarScrollBehavior, onClickBack: () -> Unit) {
     TopAppBar(title = {
         Text(
             text = "Notes",
@@ -99,20 +145,23 @@ private fun NoteScreenTopBar(onClickBack: () -> Unit) {
                 contentDescription = "back arrow app bar"
             )
         }
-    })
+    },
+        scrollBehavior = scrollBehavior
+    )
 }
 
 @Composable
 fun NotesContent(
-    notes: List<Note>?,
+    uiState: NotesUiState,
     modifier: Modifier = Modifier,
     onNoteClick: (String) -> Unit,
-    onClickAddNote: () -> Unit
+    onNoteLongClick: (String) -> Unit,
+    onClickAddNote: () -> Unit,
 ) {
     UiStateScreenContainer(
-        loading = false,
+        loading = uiState.isLoading,
         modifier = modifier,
-        empty = notes?.isEmpty() == true,
+        empty = uiState.items.isEmpty() && !uiState.isLoading,
         emptyContent = {
             EmptyState(
                 iconRes = R.drawable.ic_circled_plus,
@@ -120,32 +169,36 @@ fun NotesContent(
                 onClick = onClickAddNote
             )
         },
-        onRefresh = {}
+        onRefresh = null
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
+                .navigationBarsPadding()
         ) {
-            notes?.forEach { note ->
-                NoteItem(note = note, onNoteClick = onNoteClick)
+            uiState.items.forEach { note ->
+                NoteItem(note = note, onNoteClick = onNoteClick, onNoteLongClick = onNoteLongClick)
             }
         }
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun NoteItem(
     note: Note,
-    onNoteClick: (String) -> Unit
+    onNoteClick: (String) -> Unit,
+    onNoteLongClick: (String) -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable {
-                onNoteClick(note.id)
-            },
-        verticalArrangement = Arrangement.spacedBy(LifeHubTheme.spacing.stack.medium)
+            .combinedClickable(
+                onClick = { onNoteClick(note.id) },
+                onLongClick = { onNoteLongClick(note.id) }
+            ),
+        verticalArrangement = Arrangement.spacedBy(LifeHubTheme.spacing.stack.small)
     ) {
         Column(
             modifier = Modifier.padding(
@@ -154,18 +207,16 @@ private fun NoteItem(
             verticalArrangement = Arrangement.spacedBy(LifeHubTheme.spacing.stack.extraSmall)
         ) {
             Text(
-                text = note.title.replaceFirstChar {
-                    if (it.isLowerCase()) it.titlecase(
-                        Locale.ROOT
-                    ) else it.toString()
-                },
+                text = note.title,
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.SemiBold
             )
             Text(
                 text = note.content,
                 style = MaterialTheme.typography.bodyMedium,
-                color = LifeHubTheme.colors.textColorSecondary
+                color = LifeHubTheme.colors.textColorSecondary,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
         }
         HorizontalDivider(modifier = Modifier.fillMaxWidth())
