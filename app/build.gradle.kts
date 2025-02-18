@@ -92,6 +92,8 @@ dependencies {
     // Optional: Timber for logging
     implementation(libs.timber)
 
+    implementation(libs.bundles.retrofit)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
