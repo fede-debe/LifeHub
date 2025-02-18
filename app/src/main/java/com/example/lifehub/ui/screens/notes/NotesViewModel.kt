@@ -22,7 +22,7 @@ class NotesViewModel @Inject constructor(
     private val repository: NotesRepository
 ) : ViewModel() {
 
-    val uiState: StateFlow<NotesUiState> = repository.getNotesListFlow().map { notes ->
+    val uiState: StateFlow<NotesUiState> = repository.getNotesList().map { notes ->
         NotesUiState(
             items = notes.reversed(),
             isLoading = false,
