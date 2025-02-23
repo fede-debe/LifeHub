@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.lifehub.data.db.LifeHubDatabase
 import com.example.lifehub.data.db.dao.NotesDao
+import com.example.lifehub.data.db.dao.TodoDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,9 +23,12 @@ object DatabaseModule {
             context.applicationContext,
             LifeHubDatabase::class.java,
             "LifeHub.db"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
     @Provides
-    fun provideTaskDao(database: LifeHubDatabase): NotesDao = database.notesDao()
+    fun provideNotesDao(database: LifeHubDatabase): NotesDao = database.notesDao()
+
+    @Provides
+    fun provideTodoDao(database: LifeHubDatabase): TodoDao = database.todoDao()
 }

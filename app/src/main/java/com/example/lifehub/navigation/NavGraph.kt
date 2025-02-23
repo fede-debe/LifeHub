@@ -13,6 +13,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.lifehub.R
 import com.example.lifehub.ui.screens.home.HomeScreen
+import com.example.lifehub.ui.screens.lists.ListsScreen
+import com.example.lifehub.ui.screens.lists.todo.ToDoScreen
+import com.example.lifehub.ui.screens.lists.todo.add.TodoAddListScreen
 import com.example.lifehub.ui.screens.notes.NotesResultViewModel
 import com.example.lifehub.ui.screens.notes.NotesScreen
 import com.example.lifehub.ui.screens.notes.add.AddNoteScreen
@@ -42,7 +45,9 @@ fun NavGraph(
         composable(
             Destinations.HOME_ROUTE
         ) {
-            HomeScreen(onClickCategory = { navActions.navigateToNotesScreen() })
+            HomeScreen(onClickCategory = { navActions.navigateToNotesScreen() }, onClickLists = {
+                navActions.navigateToListsScreen()
+            })
         }
 
         composable(Destinations.NOTES_ROUTE) {
@@ -69,6 +74,33 @@ fun NavGraph(
                     resultViewModel.postSnackBarMessage(R.string.successfully_deleted_note_message)
                     navController.popBackStack()
                 })
+        }
+
+        composable(Destinations.LISTS_ROUTE) {
+            ListsScreen(onClickListType = { type ->
+                if (type == "ToDo") {
+                    navActions.navigateToTodoListScreen()
+                }
+            }, onClickBack = {
+                navController.popBackStack()
+            })
+        }
+
+        composable(Destinations.TODO_ROUTE) {
+            ToDoScreen(
+                resultViewModel = resultViewModel,
+                onClickItem = {},
+                onClickAddTodoList = {
+                    navActions.navigateToAddTodoListScreen()
+                },
+                onClickBack = { navController.popBackStack() })
+        }
+
+        composable(Destinations.TODO_ADD_LIST_ROUTE) {
+            TodoAddListScreen(onCreateList = {
+                resultViewModel.postSnackBarMessage(R.string.successfully_created_todoList_message)
+                navController.popBackStack()
+            }, onClickBack = { navController.popBackStack() } )
         }
     }
 }

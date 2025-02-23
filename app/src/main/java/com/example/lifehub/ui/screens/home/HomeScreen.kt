@@ -34,20 +34,21 @@ import com.example.lifehub.ui.components.UiStateScreenContainer
 import com.example.lifehub.util.DynamicImage
 
 @Composable
-fun HomeScreen(onClickCategory: () -> Unit) {
+fun HomeScreen(onClickCategory: () -> Unit, onClickLists: () -> Unit) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         contentWindowInsets = ScaffoldDefaults.contentWindowInsets.only(WindowInsetsSides.Top),
     ) { innerPadding ->
         HomeScreenContent(
             modifier = Modifier.padding(innerPadding),
-            onClickCategory = onClickCategory
+            onClickCategory = onClickCategory,
+            onClickLists = onClickLists
         )
     }
 }
 
 @Composable
-private fun HomeScreenContent(modifier: Modifier, onClickCategory: () -> Unit) {
+private fun HomeScreenContent(modifier: Modifier, onClickCategory: () -> Unit, onClickLists: () -> Unit) {
     UiStateScreenContainer(
         loading = false,
         modifier = modifier,
@@ -71,7 +72,13 @@ private fun HomeScreenContent(modifier: Modifier, onClickCategory: () -> Unit) {
                 rowSpacing = LifeHubTheme.spacing.inline.medium,
                 columns = 2
             ) { _, item ->
-                CategoryCard(item, onClickCategory = onClickCategory)
+                CategoryCard(item, onClickCategory = {
+                    if (item.contains("List")) {
+                        onClickLists()
+                    } else {
+                        onClickCategory()
+                    }
+                })
             }
         }
     }

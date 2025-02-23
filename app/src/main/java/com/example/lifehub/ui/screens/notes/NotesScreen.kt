@@ -74,7 +74,6 @@ fun NotesScreen(
     var noteId by remember { mutableStateOf("") }
 
     Scaffold(modifier = Modifier
-        .fillMaxSize()
         .nestedScroll(scrollBehavior.nestedScrollConnection),
         contentWindowInsets = ScaffoldDefaults.contentWindowInsets.only(WindowInsetsSides.Top),
         snackbarHost = { SnackbarHost(snackBarHostState) },
