@@ -12,7 +12,6 @@ data class TodoList(
 
 data class TodoItem(
     val id: String,
-    val title: String,
     val content: String,
     var isDone: Boolean = false
 )
