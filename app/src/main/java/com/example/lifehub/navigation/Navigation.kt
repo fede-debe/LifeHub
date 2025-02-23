@@ -7,7 +7,7 @@ import com.example.lifehub.navigation.Destinations.NOTES_ROUTE
 import com.example.lifehub.navigation.Destinations.TODO_ROUTE
 import com.example.lifehub.navigation.DestinationsArgs.NOTE_ID
 import com.example.lifehub.navigation.Screens.ADD_NOTE_SCREEN
-import com.example.lifehub.navigation.Screens.ADD_TODO_LIST
+import com.example.lifehub.navigation.Screens.ADD_TODO_LIST_SCREEN
 import com.example.lifehub.navigation.Screens.HOME_SCREEN
 import com.example.lifehub.navigation.Screens.LISTS_SCREEN
 import com.example.lifehub.navigation.Screens.NOTES_SCREEN
@@ -26,7 +26,7 @@ private object Screens {
     // Lists
     const val LISTS_SCREEN = "lists"
     const val TODO_LIST_SCREEN = "todo_list"
-    const val ADD_TODO_LIST = "add_todo_list"
+    const val ADD_TODO_LIST_SCREEN = "add_todo_list"
 }
 
 /**
@@ -41,7 +41,7 @@ object Destinations {
     // Lists
     const val LISTS_ROUTE = LISTS_SCREEN
     const val TODO_ROUTE = TODO_LIST_SCREEN
-    const val TODO_ADD_LIST_ROUTE = ADD_TODO_LIST
+    const val TODO_ADD_LIST_ROUTE = ADD_TODO_LIST_SCREEN
 }
 
 /**

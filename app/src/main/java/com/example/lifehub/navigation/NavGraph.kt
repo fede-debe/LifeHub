@@ -15,6 +15,7 @@ import com.example.lifehub.R
 import com.example.lifehub.ui.screens.home.HomeScreen
 import com.example.lifehub.ui.screens.lists.ListsScreen
 import com.example.lifehub.ui.screens.lists.todo.ToDoScreen
+import com.example.lifehub.ui.screens.lists.todo.add.TodoAddListScreen
 import com.example.lifehub.ui.screens.notes.NotesResultViewModel
 import com.example.lifehub.ui.screens.notes.NotesScreen
 import com.example.lifehub.ui.screens.notes.add.AddNoteScreen
@@ -96,7 +97,10 @@ fun NavGraph(
         }
 
         composable(Destinations.TODO_ADD_LIST_ROUTE) {
-
+            TodoAddListScreen(onCreateList = {
+                resultViewModel.postSnackBarMessage(R.string.successfully_created_todoList_message)
+                navController.popBackStack()
+            }, onClickBack = { navController.popBackStack() } )
         }
     }
 }
