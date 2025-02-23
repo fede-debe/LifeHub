@@ -4,6 +4,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -32,12 +33,14 @@ fun ButtonPrimary(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    colors: ButtonColors = ButtonDefaults.buttonColors(),
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     contentPadding: PaddingValues = PaddingValues(horizontal = 26.dp, vertical = 10.dp),
     content: @Composable RowScope.() -> Unit
 ) = Button(
     onClick = onClick,
     modifier = modifier,
+    colors = colors,
     enabled = enabled,
     interactionSource = interactionSource,
     content = content,

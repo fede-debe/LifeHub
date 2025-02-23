@@ -41,6 +41,7 @@ fun Checkbox(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier.selectable(
             selected = checked,
+            enabled = enabled,
             onClick = { onCheckedChange(!checked) }
         )) {
         Checkbox(
